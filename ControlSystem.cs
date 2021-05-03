@@ -2,6 +2,7 @@ using System;
 using Crestron.SimplSharp;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.CrestronThread;
+using Crestron.SimplSharp.WebScripting;
 
 namespace CwsDemo
 {
