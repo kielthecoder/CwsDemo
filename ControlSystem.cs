@@ -31,7 +31,11 @@ namespace CwsDemo
             try
             {
                 _api = new HttpCwsServer("/api");
-                _api.ReceivedRequestEvent += DefaultRequestHandler;
+
+                var hello = new HttpCwsRoute("hello/");
+                hello.RouteHandler = new HelloRequest();
+                _api.AddRoute(hello);
+
                 _api.Register();
             }
             catch (Exception e)
@@ -49,21 +53,6 @@ namespace CwsDemo
                     _api.Unregister();
                     _api.Dispose();
                 }
-            }
-        }
-
-        private void DefaultRequestHandler(object sender, HttpCwsRequestEventArgs args)
-        {
-            try
-            {
-                using (var writer = new StreamWriter(args.Context.Response.OutputStream))
-                {
-                    writer.WriteLine("Got request: {0}", args.Context.Request.Path);
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorLog.Error("Error in DefaultRequestHandler: {0}", e.Message);
             }
         }
     }
