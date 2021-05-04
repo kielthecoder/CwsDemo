@@ -36,6 +36,10 @@ namespace CwsDemo
                 hello.RouteHandler = new HelloRequest();
                 _api.AddRoute(hello);
 
+                var helloName = new HttpCwsRoute("hello/{NAME}");
+                helloName.RouteHandler = new HelloRequest();
+                _api.AddRoute(helloName);
+
                 _api.Register();
             }
             catch (Exception e)

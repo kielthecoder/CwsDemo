@@ -14,7 +14,19 @@ namespace CwsDemo
             {
                 case "GET":
                     context.Response.StatusCode = 200;  // OK
-                    context.Response.Write("Hello World!", true);
+
+                    if (context.Request.RouteData.Values.ContainsKey("NAME"))
+                    {
+                        var name = context.Request.RouteData.Values["NAME"];
+
+                        context.Response.Write(
+                            String.Format("Hello, {0}!", name),
+                            true);
+                    }
+                    else
+                    {
+                        context.Response.Write("Hello World!", true);
+                    }
                     break;
                 default:
                     context.Response.StatusCode = 501;  // Not implemented
