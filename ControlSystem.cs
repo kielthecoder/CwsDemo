@@ -40,6 +40,16 @@ namespace CwsDemo
                 helloName.RouteHandler = new HelloRequest();
                 _api.AddRoute(helloName);
 
+                var roomHandler = new RoomRequest();
+
+                var room = new HttpCwsRoute("room");
+                room.RouteHandler = roomHandler;
+                _api.AddRoute(room);
+
+                var roomProp = new HttpCwsRoute("room/{PROPERTY}");
+                roomProp.RouteHandler = roomHandler;
+                _api.AddRoute(roomProp);
+
                 _api.Register();
             }
             catch (Exception e)
