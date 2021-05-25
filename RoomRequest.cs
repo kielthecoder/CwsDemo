@@ -40,7 +40,8 @@ namespace CwsDemo
                         }
                         catch (Exception e)
                         {
-                            ErrorLog.Error("Exception in RoomRequest.ProcessRequest: {0}", e.Message);
+                            ErrorLog.Error("Exception in RoomRequest.ProcessRequest: {0}",
+                                e.Message);
                         }
                     }
 
@@ -55,7 +56,8 @@ namespace CwsDemo
                     {
                         using (var reader = new StreamReader(context.Request.InputStream))
                         {
-                            newSettings = JsonConvert.DeserializeObject<SystemSettings>(reader.ReadToEnd());
+                            newSettings = JsonConvert.DeserializeObject<SystemSettings>
+                                (reader.ReadToEnd());
 
                             CrestronConsole.PrintLine("Inputs: {0}", newSettings.inputs.Length);
                             CrestronConsole.PrintLine("Outputs: {0}", newSettings.outputs.Length);
@@ -65,7 +67,8 @@ namespace CwsDemo
                     }
                     catch (Exception e)
                     {
-                        ErrorLog.Error("Exception in RoomRequest.ProcessRequest: {0}", e.Message);
+                        ErrorLog.Error("Exception in RoomRequest.ProcessRequest: {0}",
+                            e.Message);
                     }
 
                     context.Response.Write("{ \"status\": \"OK\" }", true);
