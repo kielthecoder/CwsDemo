@@ -5,6 +5,46 @@ const helpNumberInput = document.getElementById('helpNumber');
 const inputs = document.getElementById('inputs');
 const outputs = document.getElementById('outputs');
 
+const saveBtn = document.getElementById('save-changes');
+saveBtn.addEventListener('click', (e) => {
+    putSettings();
+});
+
+async function putSettings () {
+    newSettings = {
+        name: nameInput.value,
+        location: locationInput.value,
+        helpNumber: helpNumberInput.value,
+        inputs: [],
+        outputs: []
+    }
+
+    Array.from(inputs.getElementsByTagName('INPUT')).forEach((item) => {
+        newSettings.inputs.push(item.value);
+    });
+
+    Array.from(outputs.getElementsByTagName('INPUT')).forEach((item) => {
+        newSettings.outputs.push(item.value);
+    });
+
+    let result = await fetch('/cws/api/room', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newSettings)
+    });
+    let data = await result.json();
+
+    if (data.status === 'OK') {
+        Array.from(document.getElementsByTagName('INPUT')).forEach((item) => {
+            item.style.borderColor = 'black';
+        });
+
+        saveBtn.style.visibility = 'hidden';
+    }
+}
+
 async function getSettings () {
     let result = await fetch('/cws/api/room');
     let data = await result.json();
@@ -56,7 +96,13 @@ async function getSettings () {
         outputs.appendChild(div);
         i += 1;
     });
+
+    Array.from(document.getElementsByTagName('INPUT')).forEach((item) => {
+        item.addEventListener('change', () => {
+            item.style.borderColor = 'red';
+            saveBtn.style.visibility = 'visible';
+        });
+    });
 }
 
-setTimeout(getSettings, 500);
-
+setTimeout(getSettings, 100);
