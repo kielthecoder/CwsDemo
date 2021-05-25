@@ -14,6 +14,7 @@ namespace CwsDemo
         public RoomRequest()
         {
             _settings = new SystemSettings();
+            _settings.Reset();
         }
 
         public void ProcessRequest(HttpCwsContext context)
@@ -33,11 +34,41 @@ namespace CwsDemo
                     }
                     else
                     {
-                        context.Response.Write(JsonConvert.SerializeObject(_settings), true);
+                        try
+                        {
+                            context.Response.Write(JsonConvert.SerializeObject(_settings), true);
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorLog.Error("Exception in RoomRequest.ProcessRequest: {0}", e.Message);
+                        }
                     }
 
                     break;
                 case "PUT":
+                    context.Response.StatusCode = 200;  // OK
+                    context.Response.ContentType = "application/json";
+
+                    SystemSettings newSettings;
+
+                    try
+                    {
+                        using (var reader = new StreamReader(context.Request.InputStream))
+                        {
+                            newSettings = JsonConvert.DeserializeObject<SystemSettings>(reader.ReadToEnd());
+
+                            CrestronConsole.PrintLine("Inputs: {0}", newSettings.inputs.Length);
+                            CrestronConsole.PrintLine("Outputs: {0}", newSettings.outputs.Length);
+                        }
+
+                        _settings.Copy(newSettings);
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorLog.Error("Exception in RoomRequest.ProcessRequest: {0}", e.Message);
+                    }
+
+                    context.Response.Write("{ \"status\": \"OK\" }", true);
                     break;
                 default:
                     context.Response.StatusCode = 501;  // Not implemented
